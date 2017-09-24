@@ -5,6 +5,8 @@ from datetime import datetime
 import dexml
 from dexml import fields
 
+from . import XML_DOCUMENT_NAMESPACE
+
 
 def iso_date(date=None):
     """
@@ -514,7 +516,7 @@ class Document(dexml.Model):
     Clase base.
     """
 
-    namespaces = """<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02" xmlns:asx="http://www.sap.com/abapxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">"""
+    namespaces = XML_DOCUMENT_NAMESPACE
 
     operation = fields.Model(CstmrDrctDbtInitn)
 

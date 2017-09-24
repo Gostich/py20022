@@ -7,44 +7,58 @@ from dexml import fields
 
 
 def iso_date(date=None):
-    ''' Return date in ISO Date Time format '''
+    """
+    Return date in ISO Date Time format
+    """
     if not date:
         date = datetime.now()
     return date.strftime("%Y-%m-%d")
 
 
 def iso_datetime(date=None):
-    ''' Return date in ISO Date Time format '''
+    """
+    Return date in ISO Date Time format
+    """
     if not date:
         date = datetime.now()
     return date.strftime("%Y-%m-%dT%H:%M:%S")
 
 
 def message_id(size=24, chars=string.ascii_uppercase + string.digits):
-    ''' Generador de identificador de mensaje '''
+    """
+    Generador de identificador de mensaje
+    """
     date = datetime.now().strftime("%Y%m%d")
     return date + 'MSG' + ''.join(random.choice(chars) for _ in range(size))
 
 
 def payment_id(size=24, chars=string.ascii_uppercase + string.digits):
-    ''' Generador de identificador de pago '''
+    """
+    Generador de identificador de pago
+    """
     date = datetime.now().strftime("%Y%m%d")
     return date + 'PMT' + ''.join(random.choice(chars) for _ in range(size))
 
 
 def generated_id(size=35, chars=string.ascii_uppercase + string.digits):
-    ''' Generador de identificador '''
+    """
+    Generador de identificador
+    """
     date = datetime.now().strftime("%Y%m%d")
     return date + 'PMT' + ''.join(random.choice(chars) for _ in range(size - 11))
 
 
 def clean_string(string, size):
-    ''' Limpia una cadena de texto según el estandar ISO 20022 '''
+    """
+    Limpia una cadena de texto según el estandar ISO 20022
+    """
     return string[0:size].replace('ñ', 'n').replace('Ñ', 'N').replace('ç', 'c').replace('Ç', 'C')
 
 
 class Identification(dexml.Model):
-    '''Identificación única e inequívoca de la cuenta del acreedor.'''
+    """
+    Identificación única e inequívoca de la cuenta del acreedor.
+    """
 
     iban = fields.String(tagname="IBAN")
 
@@ -53,7 +67,10 @@ class Identification(dexml.Model):
 
 
 class FinancialInstitutionIdentification(dexml.Model):
-    '''Identificación única e inequívoca de una entidad de crédito, asignada en virtud de un esquema internacional reconocido de identificación.'''
+    """
+    Identificación única e inequívoca de una entidad de crédito, asignada en virtud de un esquema internacional
+    reconocido de identificación.
+    """
 
     bic = fields.String(tagname="BIC", required=False)
 
@@ -62,7 +79,9 @@ class FinancialInstitutionIdentification(dexml.Model):
 
 
 class Creditor(dexml.Model):
-    '''Información relativa al acreedor.'''
+    """
+    Información relativa al acreedor.
+    """
 
     name = fields.String(tagname="Nm", required=False)
 
@@ -79,7 +98,9 @@ class Creditor(dexml.Model):
 
 
 class CreditorAccount(dexml.Model):
-    '''Identificación inequívoca de la cuenta del acreedor AT-04.'''
+    """
+    Identificación inequívoca de la cuenta del acreedor AT-04.
+    """
 
     identification = fields.Model(Identification)
 
@@ -91,7 +112,9 @@ class CreditorAccount(dexml.Model):
 
 
 class CreditorAgent(dexml.Model):
-    '''Entidad de crédito donde el acreedor mantiene su cuenta.'''
+    """
+    Entidad de crédito donde el acreedor mantiene su cuenta.
+    """
 
     financial_institution_identification = fields.Model(FinancialInstitutionIdentification)
 
@@ -103,7 +126,9 @@ class CreditorAgent(dexml.Model):
 
 
 class Other(dexml.Model):
-    '''Identificación única de una parte, asignada por una institución, mediante un esquema de identificación.'''
+    """
+    Identificación única de una parte, asignada por una institución, mediante un esquema de identificación.
+    """
 
     identification = fields.String(tagname="Id")
 
@@ -115,7 +140,9 @@ class Other(dexml.Model):
 
 
 class PrivateIdentification(dexml.Model):
-    '''Identificación única e inequívoca de la parte'''
+    """
+    Identificación única e inequívoca de la parte
+    """
 
     other = fields.Model(Other)
 
@@ -127,7 +154,9 @@ class PrivateIdentification(dexml.Model):
 
 
 class OrganisationIdentification(dexml.Model):
-    '''Identificación única e inequívoca de una persona jurídica.'''
+    """
+    Identificación única e inequívoca de una persona jurídica.
+    """
 
     other = fields.Model(Other, required=False)
 
@@ -139,7 +168,9 @@ class OrganisationIdentification(dexml.Model):
 
 
 class Identification_Private(dexml.Model):
-    '''Identificación única e inequívoca de la parte'''
+    """
+    Identificación única e inequívoca de la parte
+    """
 
     private_identification = fields.Model(PrivateIdentification)
 
@@ -151,7 +182,9 @@ class Identification_Private(dexml.Model):
 
 
 class Identification_Organisation(dexml.Model):
-    '''Identificación única e inequívoca de la parte'''
+    """
+    Identificación única e inequívoca de la parte
+    """
 
     organisation_identification = fields.Model(OrganisationIdentification)
 
@@ -163,7 +196,9 @@ class Identification_Organisation(dexml.Model):
 
 
 class CreditorSchemeIdentification(dexml.Model):
-    '''Identificación del acreedor'''
+    """
+    Identificación del acreedor
+    """
 
     identification = fields.Model(Identification_Private)
 
@@ -175,7 +210,9 @@ class CreditorSchemeIdentification(dexml.Model):
 
 
 class PaymentIdentification(dexml.Model):
-    '''Conjunto de elementos que sirven de referencia de una instrucción de pago.'''
+    """
+    Conjunto de elementos que sirven de referencia de una instrucción de pago.
+    """
 
     instruction_identification = fields.String(tagname="InstrId", required=False)
     end_to_end_identification = fields.String(tagname='EndToEndId')
@@ -193,7 +230,9 @@ class PaymentIdentification(dexml.Model):
 
 
 class InstructedAmount(dexml.Model):
-    '''Importe del adeudo directo expresado en euros (AT-06).'''
+    """
+    Importe del adeudo directo expresado en euros (AT-06).
+    """
 
     currency = fields.String(attrname="Ccy")
     amount = fields.String(tagname=".")
@@ -206,7 +245,10 @@ class InstructedAmount(dexml.Model):
 
 
 class RemittanceInformation(dexml.Model):
-    '''Información que opcionalmente remite el acreedor al deudor para permitirle conciliar el pago con la información comercial del mismo (AT-22).'''
+    """
+    Información que opcionalmente remite el acreedor al deudor para permitirle conciliar el pago con la información
+    comercial del mismo (AT-22).
+    """
 
     unstructured = fields.String(tagname="Ustrd")
 
@@ -223,7 +265,9 @@ class RemittanceInformation(dexml.Model):
 
 
 class DebtorAgent(dexml.Model):
-    '''Entidad de crédito donde el deudor mantiene su cuenta (AT-13).'''
+    """
+    Entidad de crédito donde el deudor mantiene su cuenta (AT-13).
+    """
 
     financial_institution_identification = fields.Model(FinancialInstitutionIdentification)
 
@@ -235,7 +279,9 @@ class DebtorAgent(dexml.Model):
 
 
 class Debtor(dexml.Model):
-    '''Información relativa al deudor.'''
+    """
+    Información relativa al deudor.
+    """
 
     name = fields.String(tagname="Nm", required=False)
 
@@ -252,7 +298,9 @@ class Debtor(dexml.Model):
 
 
 class DebtorAccount(dexml.Model):
-    '''Identificación inequívoca de la cuenta del deudor donde se cargará el adeudo directo (AT-07).'''
+    """
+    Identificación inequívoca de la cuenta del deudor donde se cargará el adeudo directo (AT-07).
+    """
 
     identification = fields.Model(Identification)
 
@@ -264,10 +312,12 @@ class DebtorAccount(dexml.Model):
 
 
 class MandateRelatedInformation(dexml.Model):
-    '''Conjunto de elementos utilizado para suministrar mayor información sobre el mandato firmado entre acreedor y deudor.'''
-    """Este elemento es de uso obligatorio. Si la etiqueta 2.50 ‘Indicador de modificación’ tiene el valor ‘false’,
-    no se permite la presencia del elemento 2.51 ‘Detalles de la modificación’. Si la etiqueta 2.50 ‘Indicador de modificación’
-    tiene el valor ‘true’, el elemento 2.51 ‘Detalles de la modificación’ debe estar presente.
+    """
+    Conjunto de elementos utilizado para suministrar mayor información sobre el mandato firmado entre acreedor y deudor.
+
+    Este elemento es de uso obligatorio. Si la etiqueta 2.50 ‘Indicador de modificación’ tiene el valor ‘false’, no se
+    permite la presencia del elemento 2.51 ‘Detalles de la modificación’. Si la etiqueta 2.50 ‘Indicador de
+    modificación’ tiene el valor ‘true’, el elemento 2.51 ‘Detalles de la modificación’ debe estar presente.
     """
     mandate_identification = fields.String(tagname="MndtId")
     date_of_signature = fields.String(tagname="DtOfSgntr")
@@ -281,7 +331,9 @@ class MandateRelatedInformation(dexml.Model):
 
 
 class DirectDebitTransaction(dexml.Model):
-    '''Conjunto de elementos que suministran información específica relativa al mandato de adeudo directo.'''
+    """
+    Conjunto de elementos que suministran información específica relativa al mandato de adeudo directo.
+    """
 
     mandate_related_information = fields.Model(MandateRelatedInformation)
 
@@ -293,7 +345,10 @@ class DirectDebitTransaction(dexml.Model):
 
 
 class DirectDebitTransactionInformation(dexml.Model):
-    '''Conjunto de elementos utilizados para proporcionar información sobre cada una de las operaciones individuales incluidas en el mensaje.'''
+    """
+    Conjunto de elementos utilizados para proporcionar información sobre cada una de las operaciones individuales
+    incluidas en el mensaje.
+    """
 
     payment_identification = fields.Model(PaymentIdentification)
     instructed_amount = fields.Model(InstructedAmount)
@@ -318,7 +373,9 @@ class DirectDebitTransactionInformation(dexml.Model):
 
 
 class LocalInstrument(dexml.Model):
-    '''Instrumento específico del esquema SEPA.'''
+    """
+    Instrumento específico del esquema SEPA.
+    """
 
     code = fields.String(tagname="Cd")
 
@@ -330,7 +387,9 @@ class LocalInstrument(dexml.Model):
 
 
 class ServiceLevel(dexml.Model):
-    '''Acuerdo o reglas que rigen cómo debe procesarse la operación.'''
+    """
+    Acuerdo o reglas que rigen cómo debe procesarse la operación.
+    """
 
     code = fields.String(tagname="Cd")
 
@@ -342,7 +401,9 @@ class ServiceLevel(dexml.Model):
 
 
 class PaymentTypeInformation(dexml.Model):
-    '''Conjunto de elementos utilizados para especificar con mayor detalle el tipo de operación.'''
+    """
+    Conjunto de elementos utilizados para especificar con mayor detalle el tipo de operación.
+    """
 
     service_level = fields.Model(ServiceLevel)
     local_instrument = fields.Model(LocalInstrument)
@@ -391,7 +452,9 @@ class PaymentInformation(dexml.Model):
 
 
 class InitiatingParty(dexml.Model):
-    '''Parte que presenta el mensaje. En el mensaje de presentación, puede ser el “acreedor” o “el presentador”.'''
+    """
+    Parte que presenta el mensaje. En el mensaje de presentación, puede ser el “acreedor” o “el presentador”.
+    """
 
     name = fields.String(tagname="Nm", required=False)
     # identification = fields.String(tagname="Id", required=False)
@@ -405,7 +468,9 @@ class InitiatingParty(dexml.Model):
 
 
 class GroupHeader(dexml.Model):
-    '''Conjunto de características compartidas por todas las operaciones incluidas en el mensaje.'''
+    """
+    Conjunto de características compartidas por todas las operaciones incluidas en el mensaje.
+    """
 
     message_identification = fields.String(tagname='MsgId')
     creation_date_time = fields.String(tagname='CreDtTm')
@@ -427,7 +492,9 @@ class GroupHeader(dexml.Model):
 
 
 class CstmrDrctDbtInitn(dexml.Model):
-    '''Identifica el tipo de mensaje: iniciación de adeudos directos.'''
+    """
+    Identifica el tipo de mensaje: iniciación de adeudos directos.
+    """
 
     header = fields.Model(GroupHeader)
     # payment_information = fields.Model(PaymentInformation)
@@ -443,7 +510,9 @@ class CstmrDrctDbtInitn(dexml.Model):
 
 
 class Document(dexml.Model):
-    '''Clase base.'''
+    """
+    Clase base.
+    """
 
     namespaces = """<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02" xmlns:asx="http://www.sap.com/abapxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">"""
 

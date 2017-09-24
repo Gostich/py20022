@@ -5,11 +5,13 @@ from datetime import datetime
 import dexml
 from dexml import fields
 
+
 def iso_date(date=None):
     ''' Return date in ISO Date Time format '''
     if not date:
         date = datetime.now()
     return date.strftime("%Y-%m-%d")
+
 
 def iso_datetime(date=None):
     ''' Return date in ISO Date Time format '''
@@ -17,20 +19,24 @@ def iso_datetime(date=None):
         date = datetime.now()
     return date.strftime("%Y-%m-%dT%H:%M:%S")
 
+
 def message_id(size=24, chars=string.ascii_uppercase + string.digits):
     ''' Generador de identificador de mensaje '''
     date = datetime.now().strftime("%Y%m%d")
     return date + 'MSG' + ''.join(random.choice(chars) for _ in range(size))
+
 
 def payment_id(size=24, chars=string.ascii_uppercase + string.digits):
     ''' Generador de identificador de pago '''
     date = datetime.now().strftime("%Y%m%d")
     return date + 'PMT' + ''.join(random.choice(chars) for _ in range(size))
 
+
 def generated_id(size=35, chars=string.ascii_uppercase + string.digits):
     ''' Generador de identificador '''
     date = datetime.now().strftime("%Y%m%d")
     return date + 'PMT' + ''.join(random.choice(chars) for _ in range(size - 11))
+
 
 def clean_string(string, size):
     ''' Limpia una cadena de texto según el estandar ISO 20022 '''
@@ -45,6 +51,7 @@ class Identification(dexml.Model):
     class meta:
         tagname = "Id"
 
+
 class FinancialInstitutionIdentification(dexml.Model):
     '''Identificación única e inequívoca de una entidad de crédito, asignada en virtud de un esquema internacional reconocido de identificación.'''
 
@@ -52,6 +59,7 @@ class FinancialInstitutionIdentification(dexml.Model):
 
     class meta:
         tagname = "FinInstnId"
+
 
 class Creditor(dexml.Model):
     '''Información relativa al acreedor.'''
@@ -69,6 +77,7 @@ class Creditor(dexml.Model):
     class meta:
         tagname = "Cdtr"
 
+
 class CreditorAccount(dexml.Model):
     '''Identificación inequívoca de la cuenta del acreedor AT-04.'''
 
@@ -79,6 +88,7 @@ class CreditorAccount(dexml.Model):
 
     class meta:
         tagname = "CdtrAcct"
+
 
 class CreditorAgent(dexml.Model):
     '''Entidad de crédito donde el acreedor mantiene su cuenta.'''
@@ -91,6 +101,7 @@ class CreditorAgent(dexml.Model):
     class meta:
         tagname = "CdtrAgt"
 
+
 class Other(dexml.Model):
     '''Identificación única de una parte, asignada por una institución, mediante un esquema de identificación.'''
 
@@ -101,6 +112,7 @@ class Other(dexml.Model):
 
     class meta:
         tagname = "Othr"
+
 
 class PrivateIdentification(dexml.Model):
     '''Identificación única e inequívoca de la parte'''
@@ -113,6 +125,7 @@ class PrivateIdentification(dexml.Model):
     class  meta(object):
         tagname = "PrvtId"
 
+
 class OrganisationIdentification(dexml.Model):
     '''Identificación única e inequívoca de una persona jurídica.'''
 
@@ -123,6 +136,7 @@ class OrganisationIdentification(dexml.Model):
 
     class meta:
         tagname = "OrgId"
+
 
 class Identification_Private(dexml.Model):
     '''Identificación única e inequívoca de la parte'''
@@ -135,6 +149,7 @@ class Identification_Private(dexml.Model):
     class  meta(object):
         tagname = "Id"
 
+
 class Identification_Organisation(dexml.Model):
     '''Identificación única e inequívoca de la parte'''
 
@@ -146,6 +161,7 @@ class Identification_Organisation(dexml.Model):
     class  meta(object):
         tagname = "Id"
 
+
 class CreditorSchemeIdentification(dexml.Model):
     '''Identificación del acreedor'''
 
@@ -156,6 +172,7 @@ class CreditorSchemeIdentification(dexml.Model):
 
     class  meta(object):
         tagname = "CdtrSchmeId"
+
 
 class PaymentIdentification(dexml.Model):
     '''Conjunto de elementos que sirven de referencia de una instrucción de pago.'''
@@ -174,6 +191,7 @@ class PaymentIdentification(dexml.Model):
     class meta:
         tagname = "PmtId"
 
+
 class InstructedAmount(dexml.Model):
     '''Importe del adeudo directo expresado en euros (AT-06).'''
 
@@ -185,6 +203,7 @@ class InstructedAmount(dexml.Model):
 
     class meta:
         tagname = "InstdAmt"
+
 
 class RemittanceInformation(dexml.Model):
     '''Información que opcionalmente remite el acreedor al deudor para permitirle conciliar el pago con la información comercial del mismo (AT-22).'''
@@ -202,6 +221,7 @@ class RemittanceInformation(dexml.Model):
     class meta:
         tagname = "RmtInf"
 
+
 class DebtorAgent(dexml.Model):
     '''Entidad de crédito donde el deudor mantiene su cuenta (AT-13).'''
 
@@ -212,6 +232,7 @@ class DebtorAgent(dexml.Model):
 
     class meta:
         tagname = "DbtrAgt"
+
 
 class Debtor(dexml.Model):
     '''Información relativa al deudor.'''
@@ -229,6 +250,7 @@ class Debtor(dexml.Model):
     class meta:
         tagname = "Dbtr"
 
+
 class DebtorAccount(dexml.Model):
     '''Identificación inequívoca de la cuenta del deudor donde se cargará el adeudo directo (AT-07).'''
 
@@ -239,6 +261,7 @@ class DebtorAccount(dexml.Model):
 
     class meta:
         tagname = "DbtrAcct"
+
 
 class MandateRelatedInformation(dexml.Model):
     '''Conjunto de elementos utilizado para suministrar mayor información sobre el mandato firmado entre acreedor y deudor.'''
@@ -256,6 +279,7 @@ class MandateRelatedInformation(dexml.Model):
     class meta:
         tagname = "MndtRltdInf"
 
+
 class DirectDebitTransaction(dexml.Model):
     '''Conjunto de elementos que suministran información específica relativa al mandato de adeudo directo.'''
 
@@ -266,6 +290,7 @@ class DirectDebitTransaction(dexml.Model):
 
     class meta:
         tagname = "DrctDbtTx"
+
 
 class DirectDebitTransactionInformation(dexml.Model):
     '''Conjunto de elementos utilizados para proporcionar información sobre cada una de las operaciones individuales incluidas en el mensaje.'''
@@ -291,6 +316,7 @@ class DirectDebitTransactionInformation(dexml.Model):
     class meta:
         tagname = "DrctDbtTxInf"
 
+
 class LocalInstrument(dexml.Model):
     '''Instrumento específico del esquema SEPA.'''
 
@@ -302,6 +328,7 @@ class LocalInstrument(dexml.Model):
     class meta:
         tagname = "LclInstrm"
 
+
 class ServiceLevel(dexml.Model):
     '''Acuerdo o reglas que rigen cómo debe procesarse la operación.'''
 
@@ -312,6 +339,7 @@ class ServiceLevel(dexml.Model):
 
     class meta:
         tagname = "SvcLvl"
+
 
 class PaymentTypeInformation(dexml.Model):
     '''Conjunto de elementos utilizados para especificar con mayor detalle el tipo de operación.'''
@@ -327,6 +355,7 @@ class PaymentTypeInformation(dexml.Model):
 
     class meta:
         tagname = "PmtTpInf"
+
 
 class PaymentInformation(dexml.Model):
     payment_information_identification = fields.String(tagname="PmtInfId")
@@ -360,6 +389,7 @@ class PaymentInformation(dexml.Model):
     class meta:
         tagname = "PmtInf"
 
+
 class InitiatingParty(dexml.Model):
     '''Parte que presenta el mensaje. En el mensaje de presentación, puede ser el “acreedor” o “el presentador”.'''
 
@@ -372,6 +402,7 @@ class InitiatingParty(dexml.Model):
 
     class meta:
         tagname = "InitgPty"
+
 
 class GroupHeader(dexml.Model):
     '''Conjunto de características compartidas por todas las operaciones incluidas en el mensaje.'''
@@ -394,6 +425,7 @@ class GroupHeader(dexml.Model):
     class meta:
         tagname = "GrpHdr"
 
+
 class CstmrDrctDbtInitn(dexml.Model):
     '''Identifica el tipo de mensaje: iniciación de adeudos directos.'''
 
@@ -408,6 +440,7 @@ class CstmrDrctDbtInitn(dexml.Model):
 
     class meta:
         tagname = "CstmrDrctDbtInitn"
+
 
 class Document(dexml.Model):
     '''Clase base.'''
@@ -424,4 +457,4 @@ class Document(dexml.Model):
 
     class meta:
         tagname = "Document"
-        # namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02"
+# namespace = "urn:iso:std:iso:20022:tech:xsd:pain.008.001.02"
